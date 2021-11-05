@@ -44,7 +44,7 @@ pueden cambiar con la barra deslizadora o introduciendo el ángulo manualmente.
 CUIDADO: Despejar la zona antes de mover el robot.");
             this.toolTipled.SetToolTip(this.pictureBoxbrazoayuda, @"Es posible posicionar el brazo del robot en un rango de 0 y 180 grados. Los grados se 
 pueden cambiar con la barra deslizadora o introduciendo el ángulo manualmente.
-CUIDADO: Despejar la zona antes de mover el robot.");
+CUIDADO: Despejar la zona antes de mover el robot. ");
 
         }
 
