@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
 
@@ -52,28 +46,18 @@ CUIDADO: Despejar la zona antes de mover el robot.");
         {
             try
             {
-                
                 serialPort1.PortName = port;
                 serialPort1.BaudRate = Convert.ToInt32(baud);
                 serialPort1.Open();
                 desconcectar();
-
-                
-                
                 labelpuerto.Text = port;
                 labelbaud.Text = baud;
-
-               
-
                 serialPort1.WriteLine("&I");
-
-
             }
             catch(Exception error)
             {
                 MessageBox.Show(error.Message);
             }
-
         }
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
@@ -88,7 +72,6 @@ CUIDADO: Despejar la zona antes de mover el robot.");
                     th2 = new Thread(opennewform);
                     th2.SetApartmentState(ApartmentState.STA);
                     th2.Start();
-
                 }
                 catch (Exception error)
                 {
@@ -100,16 +83,11 @@ CUIDADO: Despejar la zona antes de mover el robot.");
         private void buttonClose_Click(object sender, EventArgs e)
         {
             desconcectar();
-
             serialPort1.Close();
-
             this.Close();
-
             th2 = new Thread(opennewform);
             th2.SetApartmentState(ApartmentState.STA);
             th2.Start();
-            
-
         }
 
         private void opennewform()
@@ -117,98 +95,28 @@ CUIDADO: Despejar la zona antes de mover el robot.");
             Application.Run(new Form1());
         }
 
-        /*private void checkBoxled1_CheckedChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (checkBoxled1.Checked)
-                {
-                    serialPort1.WriteLine("&1ON");
-                    pictureBoxLed1.Image = Properties.Resources.ledencendido;
-                }
-                else
-                {
-                    serialPort1.WriteLine("&1OFF");
-                    pictureBoxLed1.Image = Properties.Resources.ledapagado;
-                }
-            }
-            catch (Exception error)
-            {
-                MessageBox.Show(error.Message);
-            }
-        }
-
-        private void checkBoxled2_CheckedChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (checkBoxled2.Checked)
-                {
-                    serialPort1.WriteLine("&2ON");
-                    pictureBoxLed2.Image = Properties.Resources.ledencendido;
-                }
-                else
-                {
-                    serialPort1.WriteLine("&2OFF");
-                    pictureBoxLed2.Image = Properties.Resources.ledapagado;
-                }
-            }
-            catch (Exception error)
-            {
-                MessageBox.Show(error.Message);
-            }
-        }
-
-        private void checkBoxled3_CheckedChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                if (checkBoxled3.Checked)
-                {
-                    serialPort1.WriteLine("&3ON");
-                    pictureBoxLed3.Image = Properties.Resources.ledencendido;
-                }
-                else
-                {
-                    serialPort1.WriteLine("&3OFF");
-                    pictureBoxLed3.Image = Properties.Resources.ledapagado;
-                }
-            }
-            catch (Exception error)
-            {
-                MessageBox.Show(error.Message);
-            }
-        }*/
-
         private void desconcectar()
         {
             try
             {
-                /*reiniciarservo();
-                serialPort1.WriteLine("&1OFF");
-                serialPort1.WriteLine("&2OFF");
-                serialPort1.WriteLine("&3OFF");
-                borrarLCD();*/
                 serialPort1.WriteLine("&R");
                 pictureBoxLed1.Image = Properties.Resources.ledapagado;
                 checkBoxled1.Checked = false;
-                
                 pictureBoxLed2.Image = Properties.Resources.ledapagado;
                 checkBoxled2.Checked = false;
-                
                 pictureBoxLed3.Image = Properties.Resources.ledapagado;
                 checkBoxled3.Checked = false;
-                
+                pictureBoxLed4.Image = Properties.Resources.ledapagado;
+                checkBoxled4.Checked = false;
+                pictureBoxLed5.Image = Properties.Resources.ledapagado;
+                checkBoxled5.Checked = false;
                 circularProgressBarPot.Value = 0;
                 circularProgressBarPot.Text = "0%";
-
             }
             catch (Exception error)
             {
                 MessageBox.Show(error.Message);
             }
-
-
         }
 
         private void buttonLCDImprimir_Click(object sender, EventArgs e)
@@ -217,7 +125,6 @@ CUIDADO: Despejar la zona antes de mover el robot.");
             {
                 string L1 = textBoxLCD1.Text;
                 string L2 = textBoxLCD2.Text;
-
                 int n = L1.Length;
                 if (n < 16)
                 {
@@ -226,7 +133,6 @@ CUIDADO: Despejar la zona antes de mover el robot.");
                         L1 += " ";
                     }
                 }
-
                 serialPort1.WriteLine($"&L{L1}{L2}");
             }
             catch (Exception error)
@@ -246,21 +152,18 @@ CUIDADO: Despejar la zona antes de mover el robot.");
             {
                 textBoxLCD1.Text = "";
                 textBoxLCD2.Text = "";
-
                 serialPort1.WriteLine("&L");
             }
             catch (Exception error)
             {
                 MessageBox.Show(error.Message);
             }
-
         }
 
         private void trackBarServo1_Scroll(object sender, EventArgs e)
         {
             try
             {
-
                 textBoxposicion1.Text = trackBarServo1.Value + "°";
                 serialPort1.WriteLine($"&S1{textBoxposicion1.Text}");
             }
@@ -270,15 +173,6 @@ CUIDADO: Despejar la zona antes de mover el robot.");
             }
         }
 
-        private void reiniciarservo()
-        {
-            serialPort1.WriteLine("&S1S20");
-            textBoxposicion1.Text = "0°";
-            trackBarServo1.Value = 0;
-            textBoxposicion2.Text = "0°";
-            trackBarServo2.Value = 0;
-        }
-
         private void buttonposicionar_Click(object sender, EventArgs e)
         {
             try
@@ -286,6 +180,61 @@ CUIDADO: Despejar la zona antes de mover el robot.");
                 serialPort1.WriteLine($"&S1{textBoxposicion1.Text}");
                 trackBarServo1.Value = Convert.ToInt32(textBoxposicion1.Text);
                 textBoxposicion1.Text += "°";
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message);
+            }
+        }
+
+        private void buttoninicial_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                serialPort1.WriteLine("&S10");
+                trackBarServo1.Value = 0;
+                textBoxposicion1.Text = "0°";
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message);
+            }
+        }
+
+        private void trackBarServo2_Scroll(object sender, EventArgs e)
+        {
+            try
+            {
+                textBoxposicion2.Text = trackBarServo2.Value + "°";
+                serialPort1.WriteLine($"&S2{textBoxposicion2.Text}");
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message);
+            }
+        }
+
+        private void buttonposicionar2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                serialPort1.WriteLine($"&S2{textBoxposicion2.Text}");
+                trackBarServo2.Value = Convert.ToInt32(textBoxposicion2.Text);
+                textBoxposicion2.Text += "°";
+            }
+            catch (Exception error)
+            {
+                MessageBox.Show(error.Message);
+            }
+        }
+
+        private void buttoninicial2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                serialPort1.WriteLine("&S20");
+                trackBarServo2.Value = 0;
+                textBoxposicion2.Text = "0°";
             }
             catch (Exception error)
             {
@@ -356,14 +305,6 @@ CUIDADO: Despejar la zona antes de mover el robot.");
                 {
                     string[] val = serialData.Split('T');
                     int value = Convert.ToInt32(val[1]);
-                    /*if (value >= trackBarTemp.Minimum && value <= trackBarTemp.Maximum)
-                    {
-                        trackBarTemp.Invoke((MethodInvoker)(() =>
-                        {
-                            trackBarTemp.Value = value;
-                            labelTemp.Text = val[1] + "°";
-                        }));
-                    }*/
                     if (value >= radialGaugetemp.MinimumValue && value <= radialGaugetemp.MaximumValue)
                     {
                         radialGaugetemp.Invoke((MethodInvoker)(() =>
@@ -382,20 +323,11 @@ CUIDADO: Despejar la zona antes de mover el robot.");
                             }
                         }));
                     }
-
                 }
                 else if (serialData.StartsWith("&H"))
                 {
                     string[] val = serialData.Split('H');
                     int value = Convert.ToInt32(val[1]);
-                    /*if (value >= trackBarHum.Minimum && value <= trackBarHum.Maximum)
-                    {
-                        trackBarHum.Invoke((MethodInvoker)(() =>
-                        {
-                            trackBarHum.Value = value;
-                            labelHum.Text = val[1] + "%";
-                        }));
-                    }*/
                     if (value >= radialGaugehum.MinimumValue && value <= radialGaugehum.MaximumValue)
                     {
                         radialGaugehum.Invoke((MethodInvoker)(() =>
@@ -407,7 +339,6 @@ CUIDADO: Despejar la zona antes de mover el robot.");
                             digitalGaugehum.Value = val[1];
                         }));
                     }
-
                 }
                 else if (serialData.StartsWith("&I"))
                 {
@@ -422,15 +353,6 @@ CUIDADO: Despejar la zona antes de mover el robot.");
                         }));
                     }
                     value = Convert.ToInt32(val[2]);
-                    /*if (value >= trackBarTemp.Minimum && value <= trackBarTemp.Maximum)
-                    {
-                        trackBarTemp.Invoke((MethodInvoker)(() =>
-                        {
-                            trackBarTemp.Value = value;
-                            labelTemp.Text = val[2] + "°";
-                        }));
-                    }*/
-
                     if (value >= radialGaugetemp.MinimumValue && value <= radialGaugetemp.MaximumValue)
                     {
                         radialGaugetemp.Invoke((MethodInvoker)(() =>
@@ -449,17 +371,7 @@ CUIDADO: Despejar la zona antes de mover el robot.");
                             }
                         }));
                     }
-
                     value = Convert.ToInt32(val[3]);
-                    /*if (value >= trackBarHum.Minimum && value <= trackBarHum.Maximum)
-                    {
-                        trackBarHum.Invoke((MethodInvoker)(() =>
-                        {
-                            trackBarHum.Value = value;
-                            labelHum.Text = val[3] + "%";
-                        }));
-                    }*/
-
                     if (value >= radialGaugehum.MinimumValue && value <= radialGaugehum.MaximumValue)
                     {
                         radialGaugehum.Invoke((MethodInvoker)(() =>
@@ -471,65 +383,7 @@ CUIDADO: Despejar la zona antes de mover el robot.");
                             digitalGaugehum.Value = val[3];
                         }));
                     }
-
                 }
-            }
-        }
-
-        private void buttoninicial_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                serialPort1.WriteLine("&S10");
-                trackBarServo1.Value = 0;
-                textBoxposicion1.Text = "0°";
-            }
-            catch (Exception error)
-            {
-                MessageBox.Show(error.Message);
-            }
-        }
-
-
-
-        private void buttonposicionar2_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                serialPort1.WriteLine($"&S2{textBoxposicion2.Text}");
-                trackBarServo2.Value = Convert.ToInt32(textBoxposicion2.Text);
-                textBoxposicion2.Text += "°";
-            }
-            catch (Exception error)
-            {
-                MessageBox.Show(error.Message);
-            }
-        }
-
-        private void buttoninicial2_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                serialPort1.WriteLine("&S20");
-                trackBarServo2.Value = 0;
-                textBoxposicion2.Text = "0°";
-            }
-            catch (Exception error)
-            {
-                MessageBox.Show(error.Message);
-            }
-        }
-
-        private void trackBarServo2_Scroll(object sender, EventArgs e)
-        {
-            try
-            {
-                textBoxposicion2.Text = trackBarServo2.Value + "°";
-                serialPort1.WriteLine($"&S2{textBoxposicion2.Text}");
-            }
-            catch (Exception error)
-            {
-                MessageBox.Show(error.Message);
             }
         }
 
@@ -548,7 +402,6 @@ CUIDADO: Despejar la zona antes de mover el robot.");
                     serialPort1.WriteLine("&1ON");
                     pictureBoxLed1.Image = Properties.Resources.ledencendido;
                     checkBoxled1.Checked = true;
-
                 }
             }
             catch (Exception error)
@@ -572,7 +425,6 @@ CUIDADO: Despejar la zona antes de mover el robot.");
                     serialPort1.WriteLine("&1ON");
                     pictureBoxLed1.Image = Properties.Resources.ledencendido;
                     checkBoxled1.Checked = true;
-
                 }
             }
             catch (Exception error)
@@ -596,7 +448,6 @@ CUIDADO: Despejar la zona antes de mover el robot.");
                     serialPort1.WriteLine("&2ON");
                     pictureBoxLed2.Image = Properties.Resources.ledencendido;
                     checkBoxled2.Checked = true;
-
                 }
             }
             catch (Exception error)
@@ -620,7 +471,6 @@ CUIDADO: Despejar la zona antes de mover el robot.");
                     serialPort1.WriteLine("&2ON");
                     pictureBoxLed2.Image = Properties.Resources.ledencendido;
                     checkBoxled2.Checked = true;
-
                 }
             }
             catch (Exception error)
@@ -644,7 +494,6 @@ CUIDADO: Despejar la zona antes de mover el robot.");
                     serialPort1.WriteLine("&3ON");
                     pictureBoxLed3.Image = Properties.Resources.ledencendido;
                     checkBoxled3.Checked = true;
-
                 }
             }
             catch (Exception error)
@@ -668,7 +517,6 @@ CUIDADO: Despejar la zona antes de mover el robot.");
                     serialPort1.WriteLine("&3ON");
                     pictureBoxLed3.Image = Properties.Resources.ledencendido;
                     checkBoxled3.Checked = true;
-
                 }
             }
             catch (Exception error)
@@ -683,16 +531,15 @@ CUIDADO: Despejar la zona antes de mover el robot.");
             {
                 if (checkBoxled4.Checked)
                 {
-                    //serialPort1.WriteLine("&3OFF");
+                    //serialPort1.WriteLine("&4OFF");
                     pictureBoxLed4.Image = Properties.Resources.ledapagado;
                     checkBoxled4.Checked = false;
                 }
                 else
                 {
-                    //serialPort1.WriteLine("&3ON");
+                    //serialPort1.WriteLine("&4ON");
                     pictureBoxLed4.Image = Properties.Resources.ledencendido;
                     checkBoxled4.Checked = true;
-
                 }
             }
             catch (Exception error)
@@ -707,16 +554,15 @@ CUIDADO: Despejar la zona antes de mover el robot.");
             {
                 if (checkBoxled4.Checked)
                 {
-                    //serialPort1.WriteLine("&1OFF");
+                    //serialPort1.WriteLine("&4OFF");
                     pictureBoxLed4.Image = Properties.Resources.ledapagado;
                     checkBoxled4.Checked = false;
                 }
                 else
                 {
-                    //serialPort1.WriteLine("&1ON");
+                    //serialPort1.WriteLine("&4ON");
                     pictureBoxLed4.Image = Properties.Resources.ledencendido;
                     checkBoxled4.Checked = true;
-
                 }
             }
             catch (Exception error)
@@ -731,16 +577,15 @@ CUIDADO: Despejar la zona antes de mover el robot.");
             {
                 if (checkBoxled5.Checked)
                 {
-                    //serialPort1.WriteLine("&3OFF");
+                    //serialPort1.WriteLine("&5OFF");
                     pictureBoxLed5.Image = Properties.Resources.ledapagado;
                     checkBoxled5.Checked = false;
                 }
                 else
                 {
-                    //serialPort1.WriteLine("&3ON");
+                    //serialPort1.WriteLine("&5ON");
                     pictureBoxLed5.Image = Properties.Resources.ledencendido;
                     checkBoxled5.Checked = true;
-
                 }
             }
             catch (Exception error)
@@ -755,16 +600,15 @@ CUIDADO: Despejar la zona antes de mover el robot.");
             {
                 if (checkBoxled5.Checked)
                 {
-                    //serialPort1.WriteLine("&3OFF");
+                    //serialPort1.WriteLine("&5OFF");
                     pictureBoxLed5.Image = Properties.Resources.ledapagado;
                     checkBoxled5.Checked = false;
                 }
                 else
                 {
-                    //serialPort1.WriteLine("&3ON");
+                    //serialPort1.WriteLine("&5ON");
                     pictureBoxLed5.Image = Properties.Resources.ledencendido;
                     checkBoxled5.Checked = true;
-
                 }
             }
             catch (Exception error)
